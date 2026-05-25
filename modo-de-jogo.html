@@ -3,46 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quantidade de Jogadores — Detetive</title>
-<link rel="manifest" href="manifest.json">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=IM+Fell+English:ital@0;1&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<title>Detetive — Configurar Partida</title>
+<link href="https://fonts.googleapis.com/css2 family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{--gold:#c9a84c;--gold-l:#e8c96b;--gold-d:#8a6520;--dk:#0d0a08;--dk3:#2a2018;--parch2:#e8d8b0}
+:root{--gold:#c9a84c;--gold-d:#8a6520;--dk:#0d0a08;--dk3:#2a2018;--parch2:#e8d8b0}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Crimson Text',serif;background:rgba(0,0,0,.96);color:var(--parch2);display:flex;flex-direction:column;align-items:center;justify-content:center;width:100vw;height:100vh;gap:28px;user-select:none}
+body{font-family:'Crimson Text',serif;background:var(--dk);color:#f2e8d0;overflow:hidden;width:100vw;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px}
 
-.scrtitle{font-family:'Cinzel Decorative',serif;font-size:28px;color:var(--gold);text-shadow:0 0 20px rgba(201,168,76,.5);text-align:center;padding:0 10px}
-.pcbtns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
-.pcbtn{width:76px;height:76px;font-family:'Cinzel',serif;font-size:30px;font-weight:700;background:var(--dk3);color:var(--gold);border:2px solid var(--gold-d);cursor:pointer;transition:all .3s;border-radius:4px}
-.pcbtn:hover{background:var(--gold-d);color:var(--dk);transform:scale(1.1);box-shadow:0 0 20px rgba(201,168,76,.4)}
-.subtitle{font-family:'IM Fell English',serif;font-style:italic;color:var(--parch2);opacity:.6;font-size:14px;text-align:center;padding:0 15px}
-
-@media (max-width: 600px) {
-  .scrtitle{font-size:22px}
-  .pcbtn{width:60px;height:60px;font-size:24px}
-}
+#bg{position:absolute;inset:0;background:radial-gradient(circle at center, #1e140a, #000);z-index:-1}
+.scrtitle{font-family:'Cinzel Decorative',serif;font-size:clamp(22px,4vw,32px);color:var(--gold);text-shadow:0 0 20px rgba(201,168,76,.5);text-align:center}
+.pcbtns{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;max-width:90vw}
+.pcbtn{width:80px;height:80px;font-family:'Cinzel',serif;font-size:32px;font-weight:700;background:var(--dk3);color:var(--gold);border:2px solid var(--gold-d);cursor:pointer;transition:all .3s;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.pcbtn:hover{background:var(--gold-d);color:var(--dk);transform:scale(1.1);box-shadow:0 0 25px rgba(201,168,76,.5)}
+.subtxt{font-family:'Cinzel',serif;font-size:14px;color:var(--parch2);opacity:.6;letter-spacing:1px;text-align:center;padding:0 20px}
 </style>
 </head>
 <body>
+<div id="bg"></div>
 
-  <div class="scrtitle">Quantos Jogadores na Partida?</div>
-  <div class="pcbtns">
-    <button class="pcbtn" onclick="selecionarJogadores(2)">2</button>
-    <button class="pcbtn" onclick="selecionarJogadores(3)">3</button>
-    <button class="pcbtn" onclick="selecionarJogadores(4)">4</button>
-    <button class="pcbtn" onclick="selecionarJogadores(5)">5</button>
-    <button class="pcbtn" onclick="selecionarJogadores(6)">6</button>
-  </div>
-  <div class="subtitle">O Jogador 1 é você. Os demais oponentes serão controlados pela inteligência artificial.</div>
+<div class="scrtitle">Quantos detetives vão jogar?</div>
+<div class="pcbtns">
+  <button class="pcbtn" onclick="selectPlayers(3)">3</button>
+  <button class="pcbtn" onclick="selectPlayers(4)">4</button>
+  <button class="pcbtn" onclick="selectPlayers(5)">5</button>
+  <button class="pcbtn" onclick="selectPlayers(6)">6</button>
+</div>
+<div class="subtxt">Partida local por turnos. Tabuleiro Clássico.</div>
 
 <script>
-function selecionarJogadores(qtd) {
-  localStorage.setItem('detetive_player_count', qtd);
-  location.href = 'jogo.html';
-}
-
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
+function selectPlayers(count) {
+    localStorage.setItem('cluedo_player_count', count);
+    window.location.href = 'jogo.html';
 }
 </script>
 </body>
