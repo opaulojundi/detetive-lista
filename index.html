@@ -4,37 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Detetive — Mansão do Crime</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#8b1a1a">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=IM+Fell+English:ital@0;1&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-:root{--gold:#c9a84c;--gold-l:#e8c96b;--gold-d:#8a6520;--cr:#8b1a1a;--cr-d:#5c0e0e;--cr-l:#c43a3a;--dk:#0d0a08;--dk2:#1a1410;--dk3:#2a2018;--parch:#f2e8d0;--parch2:#e8d8b0}
+:root{--gold:#c9a84c;--gold-l:#e8c96b;--gold-d:#8a6520;--cr:#8b1a1a;--dk:#0d0a08;--parch:#f2e8d0;--parch2:#e8d8b0}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Crimson Text',serif;background:var(--dk);color:var(--parch);overflow:hidden;width:100vw;height:100vh;user-select:none}
+body{font-family:'Crimson Text',serif;background:var(--dk);color:var(--parch);overflow:hidden;width:100vw;height:100vh;user-select:none;display:flex;align-items:center;justify-content:center}
 
-#intro{position:fixed;inset:0;z-index:1000;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#intro{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center}
 #intro-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,#2a1a0a,#0d0a08 50%,#000)}
-.fog{position:absolute;width:200%;height:100%;background:repeating-linear-gradient(0deg,transparent 0%,rgba(200,160,60,.03) 30%,transparent 60%);opacity:.5}
+.fog{position:absolute;width:200%;height:100%;background:repeating-linear-gradient(0deg,transparent 0%,rgba(200,160,60,.03) 30%,transparent 60%);opacity:.5;animation:fd 8s linear infinite}
 .fog:nth-child(2){animation:fd 10s linear infinite reverse}
 .fog:nth-child(3){animation:fd 7s linear infinite;top:50%}
-.fog{animation:fd 8s linear infinite}
 @keyframes fd{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-#intro-c{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:20px;opacity:0;animation:rev 1.5s ease .5s forwards}
+
+#intro-c{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:20px;opacity:0;animation:rev 1.5s ease .5s forwards;text-align:center;padding:20px}
 @keyframes rev{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 .candle{font-size:52px;animation:cf 1.5s ease-in-out infinite alternate;filter:drop-shadow(0 0 20px rgba(255,180,50,.8))}
-@keyframes cf{from{transform:scale(1) rotate(-2deg)}to{transform:scale(1.05) rotate(2deg);filter:drop-shadow(0 0 30px rgba(255,200,80,1))}}
-#ititle{font-family:'Cinzel Decorative',serif;font-size:clamp(30px,5vw,62px);color:var(--gold);text-shadow:0 0 40px rgba(201,168,76,.6),0 2px 4px #000;letter-spacing:4px;text-align:center}
-#isub{font-family:'Cinzel',serif;font-size:clamp(11px,1.4vw,17px);color:var(--parch2);letter-spacing:6px;opacity:.8}
-.idiv{width:280px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
-#itag{font-family:'IM Fell English',serif;font-style:italic;font-size:17px;color:var(--parch2);opacity:.7}
-#ibtn{font-family:'Cinzel',serif;font-size:17px;letter-spacing:3px;color:var(--dk);background:linear-gradient(135deg,var(--gold-l),var(--gold),var(--gold-d));border:none;padding:15px 44px;cursor:pointer;clip-path:polygon(12px 0%,calc(100% - 12px) 0%,100% 50%,calc(100% - 12px) 100%,12px 100%,0% 50%);transition:all .3s;box-shadow:0 0 30px rgba(201,168,76,.3);margin-top:12px}
-#ibtn:hover{transform:scale(1.06);box-shadow:0 0 50px rgba(201,168,76,.6)}
+@keyframes cf{from{transform:scale(1) rotate(-2deg)}to{transform:scale(1.05) rotate(2deg)}}
 
-@media (max-width: 600px) {
-  #ititle{font-size:clamp(22px,8vw,40px);letter-spacing:2px}
-  #isub{font-size:clamp(9px,2.5vw,14px)}
-}
-</svg>
+#ititle{font-family:'Cinzel Decorative',serif;font-size:clamp(32px,6vw,62px);color:var(--gold);text-shadow:0 0 40px rgba(201,168,76,.6),0 2px 4px #000;letter-spacing:4px}
+#isub{font-family:'Cinzel',serif;font-size:clamp(12px,1.8vw,17px);color:var(--parch2);letter-spacing:6px;opacity:.8;margin-top:5px}
+.idiv{width:280px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:10px 0}
+#itag{font-family:'IM Fell English',serif;font-style:italic;font-size:18px;color:var(--parch2);opacity:.7}
+
+#ibtn{font-family:'Cinzel',serif;font-size:18px;letter-spacing:3px;color:var(--dk);background:linear-gradient(135deg,var(--gold-l),var(--gold),var(--gold-d));border:none;padding:16px 48px;cursor:pointer;clip-path:polygon(12px 0%,calc(100% - 12px) 0%,100% 50%,calc(100% - 12px) 100%,12px 100%,0% 50%);transition:all .3s;box-shadow:0 0 30px rgba(201,168,76,.3);margin-top:20px;text-decoration:none;display:inline-block}
+#ibtn:hover{transform:scale(1.06);box-shadow:0 0 50px rgba(201,168,76,.6)}
 </style>
 </head>
 <body>
@@ -50,16 +44,10 @@ body{font-family:'Crimson Text',serif;background:var(--dk);color:var(--parch);ov
     <div id="isub">A MANSÃO DO CRIME</div>
     <div class="idiv"></div>
     <div id="itag">Uma noite de mistério. Um assassinato. Quem foi?</div>
-    <button id="ibtn" onclick="location.href='modo-de-jogo.html'">INICIAR PARTIDA</button>
-    <button id="ibtn" onclick="location.href='bloco.html'">ABRIR BLOCO DE NOTAS</button>
+    <a href="modo-de-jogo.html" id="ibtn">CONFIGURAR PARTIDA</a>
+    <a href="bloco.html" id="ibtn">ABRIR BLOCO DE NOTAS</a>
   </div>
 </div>
 
-<script>
-// Registro do Service Worker do PWA
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').then(() => console.log('PWA ativo!'));
-}
-</script>
 </body>
 </html>
