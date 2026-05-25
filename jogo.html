@@ -35,13 +35,14 @@ body{font-family:'Crimson Text',serif;background:var(--dk);color:var(--parch);ov
 .cat-btn{font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:var(--parch);background:linear-gradient(135deg,#231810,#140d08);border:1px solid rgba(201,168,76,.3);padding:16px;cursor:pointer;border-radius:4px;text-align:center;transition:all 0.3s;box-shadow:inset 0 0 10px rgba(0,0,0,0.5)}
 .cat-btn:hover{border-color:var(--gold);background:linear-gradient(135deg,#2d2016,#1a110a);transform:translateY(-2px)}
 
-/* BOARD AREA */
-#barea{flex:1;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:#130e06}
-#bcontainer{position:relative;max-width:98%;max-height:98%}
-#mansion-svg{display:block;border:3px solid var(--gold-d);box-shadow:0 0 50px rgba(0,0,0,.8);border-radius:2px}
+/* BOARD AREA (3D MANSIÓN) */
+#barea{flex:1;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:#1c1508}
+#bcontainer{position:relative;max-width:100%;max-height:100%}
+#mansion-svg{display:block;border:3px solid var(--gold-d);box-shadow:0 0 60px rgba(0,0,0,.9);border-radius:2px}
 
-.tok-group{cursor:pointer;transition:all 0.2s}
-.tok-group:hover{filter:brightness(1.3)}
+.tok-group{cursor:pointer;transition:all 0.3s}
+.tok-group .tok-ring{transition:all 0.3s}
+.tok-group.active .tok-ring{filter:drop-shadow(0 0 6px currentColor)}
 
 /* BOTTOM BAR */
 #bottom{height:110px;flex-shrink:0;background:linear-gradient(180deg,#0d0a08,#0a0806);border-top:2px solid rgba(201,168,76,.2);display:flex;align-items:center;padding:0 20px;gap:20px}
@@ -131,8 +132,7 @@ body{font-family:'Crimson Text',serif;background:var(--dk);color:var(--parch);ov
     </div>
 
     <div id="barea">
-      <div id="bcontainer">
-         </div>
+      <div id="bcontainer"></div>
     </div>
   </div>
 
@@ -167,8 +167,7 @@ body{font-family:'Crimson Text',serif;background:var(--dk);color:var(--parch);ov
           <div class="click-label">CLIQUE PARA REVELAR</div>
         </div>
         <div class="mcard-front">
-          <div class="mcard-list" id="mcard-list-dest">
-             </div>
+          <div class="mcard-list" id="mcard-list-dest"></div>
         </div>
       </div>
     </div>
@@ -196,7 +195,7 @@ body{font-family:'Crimson Text',serif;background:var(--dk);color:var(--parch);ov
     <div class="mrow"><div class="mlabel">CÔMODO</div><select class="msel" id="accroom"></select></div>
     <div class="mbtns">
       <button class="mbtn mbc" onclick="closeM('accmodal')">CANCELAR</button>
-      <button class="mbtn mbacc" style="background:var(--cr);color:#fff" onclick="confirmAcc()">ACUSAR TOTAL!</button>
+      <button class="mbtn mbconf" style="background:var(--cr);color:#fff" onclick="confirmAcc()">ACUSAR TOTAL!</button>
     </div>
   </div>
 </div>
@@ -216,21 +215,46 @@ const WEAPONS = [
   { id:'cano', name:'Cano de Ferro', icon:'🛠️' },
   { id:'faca', name:'Faca', icon:'🔪' },
   { id:'chave', name:'Chave Inglesa', icon:'🔧' },
-  { id:'castical', name:'Castiçal', icon:'🕯️' },
+  { id:'castical', name:'Castiçal', icon:'🕯' },
   { id:'revolver', name:'Revólver', icon:'🔫' }
 ];
 
 const ROOMS = [
-  { id:'cozinha', name:'Cozinha', x:120, y:120 },
-  { id:'sala_baile', name:'Sala de Baile', x:350, y:110 },
-  { id:'estufa', name:'Estufa', x:580, y:120 },
-  { id:'bilhar', name:'Salão de Bilhar', x:580, y:260 },
-  { id:'biblioteca', name:'Biblioteca', x:580, y:420 },
-  { id:'escritorio', name:'Escritório', x:590, y:560 },
-  { id:'hall', name:'Hall Central', x:350, y:550 },
-  { id:'sala_estar', name:'Sala de Estar', x:120, y:560 },
-  { id:'sala_jantar', name:'Sala de Jantar', x:120, y:340 }
+  { id:'study', name:'Escritório', icon:'✍' },
+  { id:'library', name:'Biblioteca', icon:'📚' },
+  { id:'billiard', name:'Sala de Sinuca', icon:'🎱' },
+  { id:'conservatory', name:'Estufa', icon:'🌿' },
+  { id:'hall', name:'Hall Central', icon:'🚪' },
+  { id:'ballroom', name:'Salão de Baile', icon:'💃' },
+  { id:'lounge', name:'Salão de Estar', icon:'🛋' },
+  { id:'dining', name:'Sala de Jantar', icon:'🍷' },
+  { id:'kitchen', name:'Cozinha', icon:'🍳' }
 ];
+
+// COORDENADAS DO CENTRO ISOMÉTRICO
+const ROOM_POSITIONS = {
+  'study':        {x: 140, y: 150},
+  'library':      {x: 120, y: 260},
+  'billiard':     {x: 110, y: 370},
+  'conservatory': {x: 130, y: 490},
+  'hall':         {x: 290, y: 140},
+  'ballroom':     {x: 290, y: 490},
+  'lounge':       {x: 440, y: 150},
+  'dining':       {x: 460, y: 280},
+  'kitchen':      {x: 440, y: 480}
+};
+
+const ROOM_CONNECTIONS = {
+  'study': ['library', 'hall', 'kitchen'],
+  'library': ['study', 'billiard', 'hall'],
+  'billiard': ['library', 'conservatory', 'ballroom'],
+  'conservatory': ['billiard', 'ballroom', 'lounge'],
+  'hall': ['study', 'library', 'lounge'],
+  'ballroom': ['billiard', 'conservatory', 'kitchen', 'dining'],
+  'lounge': ['hall', 'dining', 'conservatory'],
+  'dining': ['lounge', 'ballroom', 'kitchen'],
+  'kitchen': ['dining', 'ballroom', 'study']
+};
 
 let totalPlayersCount = parseInt(localStorage.getItem('cluedo_player_count')) || 3;
 let players = [];
@@ -240,6 +264,7 @@ let stepsRemaining = 0;
 let envelope = {};
 let currentModalCategory = '';
 let isRevelationActive = false;
+let currentPhase = 'ROLL';
 
 function setupGame() {
     let crSus = SUSPECTS[Math.floor(Math.random()*SUSPECTS.length)];
@@ -256,7 +281,7 @@ function setupGame() {
             name: `Jogador ${i + 1}`,
             character: SUSPECTS[i],
             cards: [],
-            currentRoom: ROOMS[Math.floor(Math.random() * ROOMS.length)].id,
+            currentRoom: ROOMS[i % ROOMS.length].id,
             eliminated: false
         });
     }
@@ -273,34 +298,67 @@ function setupGame() {
 }
 
 function buildSVGBoard() {
-    let html = `<svg id="mansion-svg" width="700" height="680" viewBox="0 0 700 680" xmlns="http://www.w3.org/2000/svg">`;
-    html += `<rect width="700" height="680" fill="#1c1610"/>`;
+    const container = document.getElementById('bcontainer');
+    const w = 580, h = 640;
     
-    ROOMS.forEach(r => {
-        let isCurrent = players[activeTurnIndex].currentRoom === r.id;
-        let strokeColor = isCurrent ? 'var(--gold-l)' : 'var(--gold-d)';
-        let fillBG = isCurrent ? '#2a1e12' : '#140e0a';
+    let svg = `<svg id="mansion-svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">`;
+    svg += `<rect width="${w}" height="${h}" fill="#110d08"/>`;
+    
+    const roomBlocks = [
+      {id:'study', name:'Escritório', poly:'140,50 250,110 140,170 30,110', wall:'30,110 140,170 140,190 30,130', col:'#4a3b2c', icon:'✍'},
+      {id:'library', name:'Biblioteca', poly:'120,180 230,240 120,300 10,240', wall:'10,240 120,300 120,320 10,260', col:'#2c3e50', icon:'📚'},
+      {id:'billiard', name:'Sala de Sinuca', poly:'110,310 220,370 110,430 0,370', wall:'0,370 110,430 110,450 0,390', col:'#1e824c', icon:'🎱'},
+      {id:'conservatory', name:'Estufa', poly:'130,440 240,500 130,560 20,500', wall:'20,500 130,560 130,580 20,520', col:'#16a085', icon:'🌿'},
+      {id:'hall', name:'Hall Central', poly:'290,60 400,120 290,180 180,120', wall:'180,120 290,180 290,200 180,140', col:'#7f8c8d', icon:'🚪'},
+      {id:'ballroom', name:'Salão de Baile', poly:'290,420 400,480 290,540 180,480', wall:'180,480 290,540 290,560 180,500', col:'#663399', icon:'💃'},
+      {id:'lounge', name:'Salão de Estar', poly:'440,70 550,130 440,190 330,130', wall:'330,130 440,190 440,210 330,150', col:'#b03a2e', icon:'🛋'},
+      {id:'dining', name:'Sala de Jantar', poly:'460,200 570,260 460,320 350,260', wall:'350,260 460,320 460,340 350,280', col:'#96281b', icon:'🍷'},
+      {id:'kitchen', name:'Cozinha', poly:'440,410 550,470 440,530 330,470', wall:'330,470 440,530 440,550 330,490', col:'#d35400', icon:'🍳'}
+    ];
+
+    roomBlocks.forEach(r => {
+        let activePlayer = players[activeTurnIndex];
+        let isAccessible = currentPhase === 'MOVE' && stepsRemaining > 0 && (ROOM_CONNECTIONS[activePlayer.currentRoom] || []).includes(r.id);
         
-        html += `<g id="room-rect-${r.id}" onclick="handleRoomClick('${r.id}')" style="cursor:pointer">
-            <rect x="${r.x-75}" y="${r.y-50}" width="150" height="100" fill="${fillBG}" stroke="${strokeColor}" stroke-width="2" rx="4"/>
-            <text x="${r.x}" y="${r.y}" fill="var(--parch)" font-family="Cinzel" font-size="12" text-anchor="middle" font-weight="600">${r.name.toUpperCase()}</text>
+        let strokeColor = isAccessible ? '#2ecc71' : 'var(--gold-d)';
+        let strokeWidth = isAccessible ? '3' : '1.5';
+        
+        svg += `
+        <g onclick="handleRoomClick('${r.id}')" style="cursor:${isAccessible ? 'pointer' : 'default'}">
+            <polygon points="${r.poly}" fill="${r.col}" stroke="${strokeColor}" stroke-width="${strokeWidth}" opacity="0.85"/>
+            <polygon points="${r.wall}" fill="#222" opacity="0.5"/>
+            <text x="${ROOM_POSITIONS[r.id].x}" y="${ROOM_POSITIONS[r.id].y - 15}" fill="var(--parch)" font-family="Cinzel" font-size="11" text-anchor="middle" font-weight="bold">${r.icon} ${r.name.toUpperCase()}</text>
         </g>`;
     });
 
-    players.forEach((p) => {
+    let roomPopulations = {};
+    players.forEach(p => {
         if(p.eliminated) return;
-        let rObj = ROOMS.find(r => r.id === p.currentRoom);
-        if(rObj) {
-            let offset = (p.index * 16) - ((totalPlayersCount-1)*8);
-            html += `<g class="tok-group">
-                <circle cx="${rObj.x + offset}" cy="${rObj.y + 30}" r="10" fill="${p.character.color}" stroke="#000" stroke-width="1.5"/>
-                <text x="${rObj.x + offset}" y="${rObj.y + 33}" font-size="9" fill="#000" font-weight="900" text-anchor="middle">${p.index+1}</text>
-            </g>`;
-        }
+        if(!roomPopulations[p.currentRoom]) roomPopulations[p.currentRoom] = [];
+        roomPopulations[p.currentRoom].push(p);
     });
 
-    html += `</svg>`;
-    document.getElementById('bcontainer').innerHTML = html;
+    Object.keys(roomPopulations).forEach(rId => {
+        let plist = roomPopulations[rId];
+        let center = ROOM_POSITIONS[rId];
+        plist.forEach((p, idx) => {
+            let offsetAngle = (idx / plist.length) * Math.PI * 2;
+            let radius = plist.length > 1 ? 18 : 0;
+            let tx = center.x + Math.cos(offsetAngle) * radius;
+            let ty = center.y + Math.sin(offsetAngle) * radius;
+            let isCurrent = (activeTurnIndex === p.index);
+
+            svg += `
+            <g class="tok-group ${isCurrent?'active':''}" transform="translate(${tx}, ${ty})">
+                <circle cx="0" cy="0" r="11" class="tok-ring" fill="${p.character.color}" stroke="#000" stroke-width="1.5" style="color:${p.character.color}"/>
+                <circle cx="0" cy="0" r="13" fill="none" stroke="${isCurrent?'var(--gold)':'transparent'}" stroke-width="2" stroke-dasharray="4,2"/>
+                <text x="0" y="3.5" font-size="11" text-anchor="middle" pointer-events="none">${p.character.icon}</text>
+            </g>`;
+        });
+    });
+
+    svg += `</svg>`;
+    container.innerHTML = svg;
 }
 
 function rollDice() {
@@ -322,35 +380,33 @@ function rollDice() {
         
         stepsRemaining = d1 + d2;
         diceRolled = true;
+        currentPhase = 'MOVE';
         
         document.getElementById('stcount').textContent = stepsRemaining;
         document.getElementById('rollbtn').disabled = true;
         document.getElementById('etbtn').disabled = false;
         
-        document.getElementById('phdesc').textContent = `Você tirou ${stepsRemaining}. Clique em uma sala para mover.`;
+        document.getElementById('phdesc').textContent = `Você tirou ${stepsRemaining}. Clique em uma sala destacada em verde para mover.`;
+        buildSVGBoard();
     }, 500);
 }
 
 function handleRoomClick(roomId) {
-    if(!diceRolled || stepsRemaining <= 0) return;
+    if(currentPhase !== 'MOVE' || stepsRemaining <= 0) return;
     
     let activePlayer = players[activeTurnIndex];
-    if(activePlayer.currentRoom === roomId) return;
+    let validRooms = ROOM_CONNECTIONS[activePlayer.currentRoom] || [];
+    if(!validRooms.includes(roomId)) return;
     
-    let cost = Math.floor(Math.random() * 4) + 3;
+    stepsRemaining = 0;
+    activePlayer.currentRoom = roomId;
+    document.getElementById('stcount').textContent = stepsRemaining;
     
-    if(stepsRemaining >= cost) {
-        stepsRemaining -= cost;
-        activePlayer.currentRoom = roomId;
-        document.getElementById('stcount').textContent = stepsRemaining;
-        
-        document.getElementById('sugbtn').disabled = false;
-        document.getElementById('phdesc').textContent = `Moveu-se para a sala! Passos restantes: ${stepsRemaining}.`;
-        
-        buildSVGBoard();
-    } else {
-        alert(`Dados Insuficientes! Você precisa de pelo menos ${cost} passos para alcançar este aposento.`);
-    }
+    document.getElementById('sugbtn').disabled = false;
+    currentPhase = 'SUGGEST';
+    document.getElementById('phdesc').textContent = `Moveu-se para o aposento! Faça uma sugestão ou finalize o turno.`;
+    
+    buildSVGBoard();
 }
 
 function startTurn() {
@@ -363,6 +419,7 @@ function startTurn() {
     diceRolled = false;
     stepsRemaining = 0;
     isRevelationActive = false;
+    currentPhase = 'ROLL';
     
     document.getElementById('cpname').textContent = `${cp.name} (${cp.character.name})`;
     document.getElementById('cpdot').style.backgroundColor = cp.character.color;
@@ -376,9 +433,8 @@ function startTurn() {
     buildSVGBoard();
 }
 
-/* SISTEMA POP-UP REVELAÇÃO CATEGORIAS COM TIMER */
 function openCardModal(category) {
-    if (isRevelationActive) return; // Trava interações concorrentes durante o timer
+    if (isRevelationActive) return;
     
     currentModalCategory = category;
     let title = '';
@@ -390,11 +446,8 @@ function openCardModal(category) {
     
     document.getElementById('mcard-title').textContent = title;
     document.getElementById('mcard-silhouette').textContent = silhouette;
-    
-    // Resetar estado de rotação do card interno do pop-up
     document.getElementById('modal-card-inner').classList.remove('flipped');
     
-    // Montar a lista interna oculta correspondente ao jogador ativo
     let cp = players[activeTurnIndex];
     let filteredCards = [];
     
@@ -427,13 +480,12 @@ function revealCategoryCards() {
     isRevelationActive = true;
     cardInner.classList.add('flipped');
     
-    // Aguarda 3 segundos exibindo a carta e fecha automaticamente
     setTimeout(() => {
         cardInner.classList.remove('flipped');
         setTimeout(() => {
             closeM('cardmodal');
             isRevelationActive = false;
-        }, 400); // tempo da transição CSS reversa
+        }, 400);
     }, 3000);
 }
 
@@ -470,13 +522,13 @@ function confirmSug() {
         
         matchFound = checker.cards.find(c => c.id === susSel || c.id === wepSel || c.id === rObj.id);
         if (matchFound) {
-            alert(`O ${checker.name} provou que a sua dedução está incorreta mostrando uma carta oculta.`);
+            alert(`O ${checker.name} contestou a sua sugestão mostrando uma carta correspondente.`);
             break;
         }
     }
 
     if (!matchFound) {
-        alert("Nenhum jogador conseguiu contestar a sua acusação! Anote em seus registros.");
+        alert("Nenhum jogador conseguiu contestar a sua sugestão!");
     }
     
     document.getElementById('sugbtn').disabled = true;
@@ -495,16 +547,16 @@ function confirmAcc() {
     closeM('accmodal');
 
     if(envelope.suspect.id === sus && envelope.weapon.id === wep && envelope.room.id === rom) {
-        alert(`PARABÉNS! O ${cp.name} desvendou o crime perfeitamente! Assassino: ${envelope.suspect.name}, Arma: ${envelope.weapon.name}, Sala: ${envelope.room.name}.`);
-        window.location.href = 'index.html';
+        alert(`PARABÉNS! O ${cp.name} desvendou o crime! Assassino: ${envelope.suspect.name}, Arma: ${envelope.weapon.name}, Sala: ${envelope.room.name}.`);
+        location.reload();
     } else {
-        alert(`ACUSAÇÃO INCORRETA! O ${cp.name} errou o veredito e foi desqualificado das investigações.`);
+        alert(`ACUSAÇÃO INCORRETA! O ${cp.name} errou e foi eliminado.`);
         cp.eliminated = true;
         
         let alive = players.filter(p => !p.eliminated);
         if(alive.length === 0) {
-            alert(`Fim de jogo! Todos falharam. Solução original: ${envelope.suspect.name} com ${envelope.weapon.name} na sala ${envelope.room.name}.`);
-            window.location.href = 'index.html';
+            alert(`Fim de jogo! Solução original: ${envelope.suspect.name} com ${envelope.weapon.name} na sala ${envelope.room.name}.`);
+            location.reload();
         } else {
             endTurn();
         }
