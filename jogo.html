@@ -26,23 +26,25 @@ body{font-family:'Crimson Text',serif;background:var(--dk);color:var(--parch);ov
 /* MAIN LAYOUT */
 #main{flex:1;display:flex;overflow:hidden;min-height:0}
 
-/* LEFT PANEL (CATEGORIES) */
+/* LEFT PANEL (MENU DE CARTAS) */
 #lpanel{width:260px;flex-shrink:0;background:linear-gradient(180deg,#0d0a08,#12100a);border-right:2px solid rgba(201,168,76,.2);display:flex;flex-direction:column;overflow:hidden}
-.phdr{padding:10px 14px;border-bottom:1px solid rgba(201,168,76,.15);font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--gold);background:rgba(0,0,0,0.3)}
-#mycp{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px;justify-content:center}
+.phdr{padding:10px 14px;border-bottom:1px solid rgba(201,168,76,.15);font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--gold);background:rgba(0,0,0,0.3);text-align:center}
+#mycp{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:12px;justify-content:center;align-items:center}
 
-/* CATEGORY BUTTONS */
-.cat-btn{font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:var(--parch);background:linear-gradient(135deg,#231810,#140d08);border:1px solid rgba(201,168,76,.3);padding:16px;cursor:pointer;border-radius:4px;text-align:center;transition:all 0.3s;box-shadow:inset 0 0 10px rgba(0,0,0,0.5)}
-.cat-btn:hover{border-color:var(--gold);background:linear-gradient(135deg,#2d2016,#1a110a);transform:translateY(-2px)}
+/* VISUAL DE CARTA NO MENU LATERAL */
+.menu-card-item {width:160px;height:120px;perspective:1000px;cursor:pointer}
+.menu-card-inner {width:100%;height:100%;background:linear-gradient(135deg,#2a1e15,#140d07);border:2px solid var(--gold-d);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;box-shadow:0 6px 12px rgba(0,0,0,0.6);transition:all 0.3s ease}
+.menu-card-item:hover .menu-card-inner {border-color:var(--gold);transform:translateY(-4px);box-shadow:0 10px 20px rgba(201,168,76,0.15)}
+.menu-card-icon {font-size:28px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))}
+.menu-card-label {font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--parch);font-weight:bold;text-align:center}
 
-/* BOARD AREA (3D MANSIÓN) */
-#barea{flex:1;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:#1c1508}
+/* BOARD AREA (2D DETALHADO) */
+#barea{flex:1;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:#16120e}
 #bcontainer{position:relative;max-width:100%;max-height:100%}
-#mansion-svg{display:block;border:3px solid var(--gold-d);box-shadow:0 0 60px rgba(0,0,0,.9);border-radius:2px}
+#mansion-svg{display:block;border:3px solid var(--gold-d);box-shadow:0 0 60px rgba(0,0,0,.9);border-radius:4px}
 
-.tok-group{cursor:pointer;transition:all 0.3s}
-.tok-group .tok-ring{transition:all 0.3s}
-.tok-group.active .tok-ring{filter:drop-shadow(0 0 6px currentColor)}
+.tok-group{cursor:pointer}
+.tok-group circle{transition:transform 0.3s ease}
 
 /* BOTTOM BAR */
 #bottom{height:110px;flex-shrink:0;background:linear-gradient(180deg,#0d0a08,#0a0806);border-top:2px solid rgba(201,168,76,.2);display:flex;align-items:center;padding:0 20px;gap:20px}
@@ -65,7 +67,7 @@ body{font-family:'Crimson Text',serif;background:var(--dk);color:var(--parch);ov
 #phtitle{font-family:'Cinzel Decorative',serif;font-size:13px;color:var(--gold)}
 #phdesc{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:var(--parch2);opacity:.7;margin-top:2px}
 
-/* MODALS */
+/* MODALS GERAIS */
 .gmodal{position:fixed;inset:0;z-index:1100;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center}
 .gmbox{background:linear-gradient(160deg,#1a1008,#2d1c08,#1a1008);border:3px solid var(--gold-d);padding:25px;max-width:440px;width:90%;position:relative;border-radius:4px}
 .mtitle{font-family:'Cinzel Decorative',serif;font-size:18px;color:var(--gold);text-shadow:0 0 20px rgba(201,168,76,.3);text-align:center;margin-bottom:15px}
@@ -78,28 +80,36 @@ body{font-family:'Crimson Text',serif;background:var(--dk);color:var(--parch);ov
 .mbc{background:rgba(201,168,76,.1);color:var(--parch2);border:1px solid rgba(201,168,76,.2)}
 .mbconf{background:linear-gradient(135deg,var(--gold-d),var(--gold));color:var(--dk);font-weight:bold}
 
-/* INTERACTIVE CARD POPUP ENGINE */
-#cardmodal .gmbox{max-width:320px;padding:30px 20px;display:flex;flex-direction:column;align-items:center}
-.modal-card-wrapper{perspective:1000px;width:220px;height:320px;position:relative;margin:15px 0}
-.modal-card-inner{width:100%;height:100%;position:absolute;transform-style:preserve-3d;transition:transform 0.6s cubic-bezier(0.4,0,0.2,1);cursor:pointer}
-.modal-card-inner.flipped{transform:rotateY(180deg);cursor:default}
-.mcard-front, .mcard-back{width:100%;height:100%;position:absolute;backface-visibility:hidden;border-radius:12px;border:2px solid var(--gold);box-shadow:0 10px 25px rgba(0,0,0,0.7)}
-.mcard-back{background:linear-gradient(135deg,#2d1f14, #140d07);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;color:var(--gold)}
-.mcard-back .silhouette{font-size:70px;opacity:0.2;filter:drop-shadow(0 0 10px rgba(0,0,0,0.8))}
-.mcard-back .click-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;opacity:0.7;text-align:center;padding:0 10px}
-.mcard-front{transform:rotateY(180deg);background:linear-gradient(135deg,#23160a,#3d2714);padding:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:15px;text-align:center}
-.mcard-list{display:flex;flex-direction:column;gap:12px;width:100%;overflow-y:auto}
-.mcard-item{background:rgba(0,0,0,0.4);border:1px solid rgba(201,168,76,0.2);border-radius:6px;padding:10px;display:flex;align-items:center;gap:10px}
-.mcard-item-icon{font-size:24px}
-.mcard-item-name{font-family:'IM Fell English',serif;font-size:15px;color:var(--parch)}
-.mcard-empty{font-family:'Crimson Text',serif;font-style:italic;font-size:14px;color:var(--parch2);opacity:0.6}
+/* MODAL DE EXIBIÇÃO DE CATEGORIAS (GALERIA DE CARTAS) */
+#cardmodal .gmbox {max-width:85vw;width:800px;background:linear-gradient(145deg,#120e0a,#1f160e);padding:40px 30px;min-height:450px}
+.close-modal-x {position:absolute;top:15px;right:20px;font-size:26px;color:var(--gold);cursor:pointer;font-family:'Cinzel',sans-serif;transition:all 0.2s;font-weight:bold}
+.close-modal-x:hover {color:#fff;transform:scale(1.15)}
 
-/* RESPONSIVE ADAPTATIONS */
+/* GRID DE CARTAS INDIVIDUAIS */
+.cards-gallery-grid {display:grid;grid-template-columns:repeat(auto-fit, minmax(130px, 130px));gap:20px;justify-content:center;margin-top:20px;max-height:60vh;overflow-y:auto;padding:10px}
+
+/* CARTA DE DUPLA FACE (FLIP) */
+.flip-card-wrapper {perspective:1000px;width:130px;height:190px}
+.flip-card-inner {width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);cursor:pointer}
+.flip-card-inner.flipped {transform:rotateY(180deg)}
+
+.card-face-back, .card-face-front {width:100%;height:100%;position:absolute;backface-visibility:hidden;border-radius:8px;border:2px solid var(--gold-d);box-shadow:0 4px 10px rgba(0,0,0,0.5)}
+/* VERSO (SILHUETA ESCONDIDA) */
+.card-face-back {background:linear-gradient(135deg,#2c1a10,#140a05);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--gold)}
+.card-face-back .silh-icon {font-size:42px;opacity:0.3;filter:drop-shadow(0 2px 4px #000)}
+.card-face-back .peek-txt {font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;opacity:0.5}
+
+/* FRENTE (REVELADA) */
+.card-face-front {transform:rotateY(180deg);background:linear-gradient(135deg,#321f14,#4d3524);display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:14px 8px;text-align:center}
+.card-front-icon {font-size:36px;margin-top:10px}
+.card-front-title {font-family:'IM Fell English',serif;font-size:14px;color:var(--parch);font-weight:bold;line-height:1.2}
+
+/* RESPONSIVE */
 @media (max-width: 860px) {
   #main{flex-direction:column-reverse}
-  #lpanel{width:100%;height:80px;border-right:none;border-top:2px solid var(--gold-d)}
-  #mycp{flex-direction:row;overflow-x:auto;overflow-y:hidden;padding:10px;gap:10px;align-items:center}
-  .cat-btn{padding:10px 15px;white-space:nowrap;flex:1}
+  #lpanel{width:100%;height:140px;border-right:none;border-top:2px solid var(--gold-d)}
+  #mycp{flex-direction:row;overflow-x:auto;overflow-y:hidden;padding:10px;gap:15px;justify-content:flex-start}
+  .menu-card-item{flex-shrink:0}
   #bottom{height:auto;padding:10px;flex-wrap:wrap;gap:10px;justify-content:space-between}
   #actarea{margin-left:0;width:100%;justify-content:center}
 }
@@ -123,11 +133,26 @@ body{font-family:'Crimson Text',serif;background:var(--dk);color:var(--parch);ov
 
   <div id="main">
     <div id="lpanel">
-      <div class="phdr">CATEGORIAS DE CARTAS</div>
+      <div class="phdr">CADERNO DE EVIDÊNCIAS</div>
       <div id="mycp">
-        <button class="cat-btn" onclick="openCardModal('suspect')">🕵️ VER SUSPEITOS</button>
-        <button class="cat-btn" onclick="openCardModal('weapon')">🪓 VER ARMAS</button>
-        <button class="cat-btn" onclick="openCardModal('room')">🏰 VER CÔMODOS</button>
+        <div class="menu-card-item" onclick="openGalleryModal('suspect')">
+          <div class="menu-card-inner">
+            <div class="menu-card-icon">🕵️</div>
+            <div class="menu-card-label">VER SUSPEITOS</div>
+          </div>
+        </div>
+        <div class="menu-card-item" onclick="openGalleryModal('weapon')">
+          <div class="menu-card-inner">
+            <div class="menu-card-icon">🪓</div>
+            <div class="menu-card-label">VER ARMAS</div>
+          </div>
+        </div>
+        <div class="menu-card-item" onclick="openGalleryModal('room')">
+          <div class="menu-card-inner">
+            <div class="menu-card-icon">🏰</div>
+            <div class="menu-card-label">VER CÔMODOS</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -159,18 +184,9 @@ body{font-family:'Crimson Text',serif;background:var(--dk);color:var(--parch);ov
 
 <div class="gmodal" id="cardmodal">
   <div class="gmbox">
+    <div class="close-modal-x" onclick="closeM('cardmodal')">✕</div>
     <div class="mtitle" id="mcard-title">CATEGORIA</div>
-    <div class="modal-card-wrapper">
-      <div class="modal-card-inner" id="modal-card-inner" onclick="revealCategoryCards()">
-        <div class="mcard-back">
-          <div class="silhouette" id="mcard-silhouette">❓</div>
-          <div class="click-label">CLIQUE PARA REVELAR</div>
-        </div>
-        <div class="mcard-front">
-          <div class="mcard-list" id="mcard-list-dest"></div>
-        </div>
-      </div>
-    </div>
+    <div class="cards-gallery-grid" id="gallery-grid-dest"></div>
   </div>
 </div>
 
@@ -220,29 +236,16 @@ const WEAPONS = [
 ];
 
 const ROOMS = [
-  { id:'study', name:'Escritório', icon:'✍' },
-  { id:'library', name:'Biblioteca', icon:'📚' },
-  { id:'billiard', name:'Sala de Sinuca', icon:'🎱' },
-  { id:'conservatory', name:'Estufa', icon:'🌿' },
-  { id:'hall', name:'Hall Central', icon:'🚪' },
-  { id:'ballroom', name:'Salão de Baile', icon:'💃' },
-  { id:'lounge', name:'Salão de Estar', icon:'🛋' },
-  { id:'dining', name:'Sala de Jantar', icon:'🍷' },
-  { id:'kitchen', name:'Cozinha', icon:'🍳' }
+  { id:'study', name:'Escritório', icon:'✍', x:85, y:85 },
+  { id:'library', name:'Biblioteca', icon:'📚', x:85, y:235 },
+  { id:'billiard', name:'Sala de Sinuca', icon:'🎱', x:85, y:385 },
+  { id:'conservatory', name:'Estufa', icon:'🌿', x:85, y:535 },
+  { id:'hall', name:'Hall Central', icon:'🚪', x:275, y:125 },
+  { id:'ballroom', name:'Salão de Baile', icon:'💃', x:275, y:495 },
+  { id:'lounge', name:'Salão de Estar', icon:'🛋', x:465, y:85 },
+  { id:'dining', name:'Sala de Jantar', icon:'🍷', x:465, y:285 },
+  { id:'kitchen', name:'Cozinha', icon:'🍳', x:465, y:535 }
 ];
-
-// COORDENADAS DO CENTRO ISOMÉTRICO
-const ROOM_POSITIONS = {
-  'study':        {x: 140, y: 150},
-  'library':      {x: 120, y: 260},
-  'billiard':     {x: 110, y: 370},
-  'conservatory': {x: 130, y: 490},
-  'hall':         {x: 290, y: 140},
-  'ballroom':     {x: 290, y: 490},
-  'lounge':       {x: 440, y: 150},
-  'dining':       {x: 460, y: 280},
-  'kitchen':      {x: 440, y: 480}
-};
 
 const ROOM_CONNECTIONS = {
   'study': ['library', 'hall', 'kitchen'],
@@ -262,9 +265,8 @@ let activeTurnIndex = 0;
 let diceRolled = false;
 let stepsRemaining = 0;
 let envelope = {};
-let currentModalCategory = '';
-let isRevelationActive = false;
 let currentPhase = 'ROLL';
+let dynamicFlipTimers = {};
 
 function setupGame() {
     let crSus = SUSPECTS[Math.floor(Math.random()*SUSPECTS.length)];
@@ -297,40 +299,64 @@ function setupGame() {
     startTurn();
 }
 
+// CONSTRUÇÃO DO TABULEIRO PLANO 2D ALTAMENTE DETALHADO (VINTAGE ARCHITECTURE PLAN)
 function buildSVGBoard() {
     const container = document.getElementById('bcontainer');
-    const w = 580, h = 640;
+    const w = 550, h = 620;
     
     let svg = `<svg id="mansion-svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">`;
-    svg += `<rect width="${w}" height="${h}" fill="#110d08"/>`;
     
-    const roomBlocks = [
-      {id:'study', name:'Escritório', poly:'140,50 250,110 140,170 30,110', wall:'30,110 140,170 140,190 30,130', col:'#4a3b2c', icon:'✍'},
-      {id:'library', name:'Biblioteca', poly:'120,180 230,240 120,300 10,240', wall:'10,240 120,300 120,320 10,260', col:'#2c3e50', icon:'📚'},
-      {id:'billiard', name:'Sala de Sinuca', poly:'110,310 220,370 110,430 0,370', wall:'0,370 110,430 110,450 0,390', col:'#1e824c', icon:'🎱'},
-      {id:'conservatory', name:'Estufa', poly:'130,440 240,500 130,560 20,500', wall:'20,500 130,560 130,580 20,520', col:'#16a085', icon:'🌿'},
-      {id:'hall', name:'Hall Central', poly:'290,60 400,120 290,180 180,120', wall:'180,120 290,180 290,200 180,140', col:'#7f8c8d', icon:'🚪'},
-      {id:'ballroom', name:'Salão de Baile', poly:'290,420 400,480 290,540 180,480', wall:'180,480 290,540 290,560 180,500', col:'#663399', icon:'💃'},
-      {id:'lounge', name:'Salão de Estar', poly:'440,70 550,130 440,190 330,130', wall:'330,130 440,190 440,210 330,150', col:'#b03a2e', icon:'🛋'},
-      {id:'dining', name:'Sala de Jantar', poly:'460,200 570,260 460,320 350,260', wall:'350,260 460,320 460,340 350,280', col:'#96281b', icon:'🍷'},
-      {id:'kitchen', name:'Cozinha', poly:'440,410 550,470 440,530 330,470', wall:'330,470 440,530 440,550 330,490', col:'#d35400', icon:'🍳'}
+    // Fundo Texturizado da Mansão (Asfalto/Pátio Escuro)
+    svg += `<rect width="${w}" height="${h}" fill="#1b140f"/>`;
+    svg += `<rect x="15" y="15" width="${w-30}" height="${h-30}" fill="#140e0a" stroke="#2c1e14" stroke-width="2"/>`;
+    
+    // Definição dos Aposentos em Formato Técnico 2D
+    const blueprintRooms = [
+      {id:'study', name:'Escritório', x:25, y:25, rw:120, rh:120, col:'#2a1e17', border:'#8a6520', floor:'rgba(201,168,76,0.05)'},
+      {id:'library', name:'Biblioteca', x:25, y:175, rw:120, rh:120, col:'#1c2833', border:'#34495e', floor:'rgba(52,73,94,0.1)'},
+      {id:'billiard', name:'Sala de Sinuca', x:25, y:325, rw:120, rh:120, col:'#143d24', border:'#27ae60', floor:'rgba(39,174,96,0.1)'},
+      {id:'conservatory', name:'Estufa', x:25, y:475, rw:120, rh:120, col:'#0e312f', border:'#16a085', floor:'rgba(22,160,133,0.1)'},
+      
+      {id:'hall', name:'Hall Central', x:185, y:25, rw:180, rh:200, col:'#2d3135', border:'#7f8c8d', floor:'rgba(255,255,255,0.03)'},
+      {id:'ballroom', name:'Salão de Baile', x:185, y:395, rw:180, rh:200, col:'#2a1b3d', border:'#8e44ad', floor:'rgba(142,68,173,0.08)'},
+      
+      {id:'lounge', name:'Salão de Estar', x:405, y:25, rw:120, rh:120, col:'#3a1414', border:'#c0392b', floor:'rgba(192,57,43,0.08)'},
+      {id:'dining', name:'Sala de Jantar', x:405, y:175, rw:120, rh:220, col:'#3d2014', border:'#d35400', floor:'rgba(211,84,0,0.08)'},
+      {id:'kitchen', name:'Cozinha', x:405, y:425, rw:120, rh:170, col:'#342514', border:'#f39c12', floor:'rgba(243,156,18,0.05)'}
     ];
 
-    roomBlocks.forEach(r => {
+    // Desenhar Linhas de Conexão Estilizadas (Passagens)
+    blueprintRooms.forEach(r => {
         let activePlayer = players[activeTurnIndex];
         let isAccessible = currentPhase === 'MOVE' && stepsRemaining > 0 && (ROOM_CONNECTIONS[activePlayer.currentRoom] || []).includes(r.id);
         
-        let strokeColor = isAccessible ? '#2ecc71' : 'var(--gold-d)';
-        let strokeWidth = isAccessible ? '3' : '1.5';
+        let strokeColor = isAccessible ? '#2ecc71' : r.border;
+        let strokeWidth = isAccessible ? '3' : '2';
         
+        // Caixa do Aposento
         svg += `
         <g onclick="handleRoomClick('${r.id}')" style="cursor:${isAccessible ? 'pointer' : 'default'}">
-            <polygon points="${r.poly}" fill="${r.col}" stroke="${strokeColor}" stroke-width="${strokeWidth}" opacity="0.85"/>
-            <polygon points="${r.wall}" fill="#222" opacity="0.5"/>
-            <text x="${ROOM_POSITIONS[r.id].x}" y="${ROOM_POSITIONS[r.id].y - 15}" fill="var(--parch)" font-family="Cinzel" font-size="11" text-anchor="middle" font-weight="bold">${r.icon} ${r.name.toUpperCase()}</text>
+            <rect x="${r.x}" y="${r.y}" width="${r.rw}" height="${r.rh}" fill="${r.col}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>
+            <rect x="${r.x+4}" y="${r.y+4}" width="${r.rw-8}" height="${r.rh-8}" fill="${r.floor}" stroke="rgba(201,168,76,0.15)" stroke-width="1" stroke-dasharray="4,2"/>
+            
+            <circle cx="${r.x+10}" cy="${r.y+10}" r="2" fill="${strokeColor}" opacity="0.5"/>
+            <circle cx="${r.x+r.rw-10}" cy="${r.y+10}" r="2" fill="${strokeColor}" opacity="0.5"/>
+            <circle cx="${r.x+10}" cy="${r.y+r.rh-10}" r="2" fill="${strokeColor}" opacity="0.5"/>
+            <circle cx="${r.x+r.rw-10}" cy="${r.y+r.rh-10}" r="2" fill="${strokeColor}" opacity="0.5"/>
         </g>`;
     });
 
+    // Segunda camada: Textos para não sobrepor linhas
+    blueprintRooms.forEach(r => {
+        let roomConfig = ROOMS.find(ro => ro.id === r.id);
+        svg += `
+        <g pointer-events="none">
+            <text x="${roomConfig.x}" y="${roomConfig.y}" fill="var(--gold-l)" font-family="Cinzel" font-size="11" text-anchor="middle" font-weight="900" letter-spacing="1px">${roomConfig.icon} ${r.name.toUpperCase()}</text>
+            <text x="${roomConfig.x}" y="${roomConfig.y + 16}" fill="rgba(242,232,208,0.3)" font-family="Crimson Text" font-size="9" text-anchor="middle" font-style="italic">Aposento Seguro</text>
+        </g>`;
+    });
+
+    // Distribuição de Peões (Tokens de Jogadores) no Tabuleiro 2D
     let roomPopulations = {};
     players.forEach(p => {
         if(p.eliminated) return;
@@ -340,19 +366,22 @@ function buildSVGBoard() {
 
     Object.keys(roomPopulations).forEach(rId => {
         let plist = roomPopulations[rId];
-        let center = ROOM_POSITIONS[rId];
+        let rData = ROOMS.find(ro => ro.id === rId);
+        
         plist.forEach((p, idx) => {
             let offsetAngle = (idx / plist.length) * Math.PI * 2;
-            let radius = plist.length > 1 ? 18 : 0;
-            let tx = center.x + Math.cos(offsetAngle) * radius;
-            let ty = center.y + Math.sin(offsetAngle) * radius;
+            let radius = plist.length > 1 ? 22 : 0;
+            let tx = rData.x + Math.cos(offsetAngle) * radius;
+            let ty = rData.y + 35 + Math.sin(offsetAngle) * radius; // Deslocado abaixo do texto
             let isCurrent = (activeTurnIndex === p.index);
 
             svg += `
-            <g class="tok-group ${isCurrent?'active':''}" transform="translate(${tx}, ${ty})">
-                <circle cx="0" cy="0" r="11" class="tok-ring" fill="${p.character.color}" stroke="#000" stroke-width="1.5" style="color:${p.character.color}"/>
-                <circle cx="0" cy="0" r="13" fill="none" stroke="${isCurrent?'var(--gold)':'transparent'}" stroke-width="2" stroke-dasharray="4,2"/>
-                <text x="0" y="3.5" font-size="11" text-anchor="middle" pointer-events="none">${p.character.icon}</text>
+            <g class="tok-group" transform="translate(${tx}, ${ty})">
+                <circle cx="2" cy="3" r="14" fill="#000" opacity="0.6"/>
+                <circle cx="0" cy="0" r="14" fill="${p.character.color}" stroke="#000" stroke-width="2"/>
+                <circle cx="0" cy="0" r="11" fill="none" stroke="#fff" stroke-width="1" opacity="0.4"/>
+                <circle cx="0" cy="0" r="17" fill="none" stroke="${isCurrent ? 'var(--gold-l)' : 'transparent'}" stroke-width="2" stroke-dasharray="5,2"/>
+                <text x="0" y="4" font-size="12" text-anchor="middle" pointer-events="none">${p.character.icon}</text>
             </g>`;
         });
     });
@@ -386,7 +415,7 @@ function rollDice() {
         document.getElementById('rollbtn').disabled = true;
         document.getElementById('etbtn').disabled = false;
         
-        document.getElementById('phdesc').textContent = `Você tirou ${stepsRemaining}. Clique em uma sala destacada em verde para mover.`;
+        document.getElementById('phdesc').textContent = `Você tirou ${stepsRemaining} passos. Escolha um aposento demarcado para se mover.`;
         buildSVGBoard();
     }, 500);
 }
@@ -404,7 +433,7 @@ function handleRoomClick(roomId) {
     
     document.getElementById('sugbtn').disabled = false;
     currentPhase = 'SUGGEST';
-    document.getElementById('phdesc').textContent = `Moveu-se para o aposento! Faça uma sugestão ou finalize o turno.`;
+    document.getElementById('phdesc').textContent = `Você entrou no aposento! Realize uma Sugestão ou encerre a vez.`;
     
     buildSVGBoard();
 }
@@ -418,7 +447,6 @@ function startTurn() {
 
     diceRolled = false;
     stepsRemaining = 0;
-    isRevelationActive = false;
     currentPhase = 'ROLL';
     
     document.getElementById('cpname').textContent = `${cp.name} (${cp.character.name})`;
@@ -429,64 +457,69 @@ function startTurn() {
     document.getElementById('etbtn').disabled = true;
     document.getElementById('sugbtn').disabled = true;
     
-    document.getElementById('phdesc').textContent = `Role os dados para iniciar seu turno.`;
+    document.getElementById('phdesc').textContent = `Role os dados estruturais para iniciar seu turno de investigação.`;
     buildSVGBoard();
 }
 
-function openCardModal(category) {
-    if (isRevelationActive) return;
-    
-    currentModalCategory = category;
+// NOVO SISTEMA: ABRE A GALERIA DA CATEGORIA SELECIONADA
+function openGalleryModal(category) {
     let title = '';
-    let silhouette = '❓';
+    let silhIcon = '❓';
+    let fullList = [];
     
-    if(category === 'suspect') { title = 'SUSPEITOS'; silhouette = '👤'; }
-    if(category === 'weapon') { title = 'ARMAS'; silhouette = '⚔️'; }
-    if(category === 'room') { title = 'CÔMODOS'; silhouette = '🏰'; }
+    if(category === 'suspect') { title = 'FICHA DE SUSPEITOS'; silhIcon = '👤'; fullList = SUSPECTS; }
+    if(category === 'weapon') { title = 'ARSENAL DE ARMAS'; silhIcon = '⚔️'; fullList = WEAPONS; }
+    if(category === 'room') { title = 'PLANTA DE CÔMODOS'; silhIcon = '🏰'; fullList = ROOMS; }
     
     document.getElementById('mcard-title').textContent = title;
-    document.getElementById('mcard-silhouette').textContent = silhouette;
-    document.getElementById('modal-card-inner').classList.remove('flipped');
+    let gridDest = document.getElementById('gallery-grid-dest');
+    gridDest.innerHTML = '';
     
     let cp = players[activeTurnIndex];
-    let filteredCards = [];
     
-    if(category === 'suspect') filteredCards = cp.cards.filter(c => SUSPECTS.some(s => s.id === c.id));
-    if(category === 'weapon') filteredCards = cp.cards.filter(c => WEAPONS.some(w => w.id === c.id));
-    if(category === 'room') filteredCards = cp.cards.filter(c => ROOMS.some(r => r.id === c.id));
-    
-    let listDest = document.getElementById('mcard-list-dest');
-    listDest.innerHTML = '';
-    
-    if(filteredCards.length === 0) {
-        listDest.innerHTML = `<div class="mcard-empty">Nenhuma carta nesta categoria</div>`;
-    } else {
-        filteredCards.forEach(card => {
-            listDest.innerHTML += `
-              <div class="mcard-item">
-                <div class="mcard-item-icon">${card.icon || '🃏'}</div>
-                <div class="mcard-item-name">${card.name}</div>
-              </div>`;
-        });
-    }
+    fullList.forEach((item, index) => {
+        // Verifica se o jogador logado possui fisicamente essa carta
+        let ownsCard = cp.cards.some(c => c.id === item.id);
+        let displayName = ownsCard ? item.name : 'Desconhecido';
+        let displayIcon = ownsCard ? (item.icon || '🃏') : silhIcon;
+        
+        let cardId = `fcard-${category}-${index}`;
+        
+        gridDest.innerHTML += `
+        <div class="flip-card-wrapper" onclick="triggerCardFlip('${cardId}')">
+            <div class="flip-card-inner" id="${cardId}">
+                <div class="card-face-back">
+                    <div class="silh-icon">${silhIcon}</div>
+                    <div class="peek-txt">CLIQUE PARA ESPIAR</div>
+                </div>
+                <div class="card-face-front">
+                    <div style="font-size:10px; font-family:'Cinzel'; color:var(--gold); opacity:0.6;">EVIDÊNCIA</div>
+                    <div class="card-front-icon">${displayIcon}</div>
+                    <div class="card-front-title">${displayName}</div>
+                    <div style="font-size:9px; color:${ownsCard ? '#2ecc71':'#e74c3c'}; font-family:'Cinzel';">${ownsCard ? 'SUA CARTA':'OCULTA'}</div>
+                </div>
+            </div>
+        </div>`;
+    });
     
     document.getElementById('cardmodal').style.display = 'flex';
 }
 
-function revealCategoryCards() {
-    let cardInner = document.getElementById('modal-card-inner');
-    if (cardInner.classList.contains('flipped') || isRevelationActive) return;
+// SISTEMA DE FLIP INTELIGENTE AUTÔNOMO DE 2 SEGUNDOS
+function triggerCardFlip(cardId) {
+    let el = document.getElementById(cardId);
+    if (!el || el.classList.contains('flipped')) return;
     
-    isRevelationActive = true;
-    cardInner.classList.add('flipped');
+    // Limpa temporizadores antigos caso existam redundâncias
+    if(dynamicFlipTimers[cardId]) clearTimeout(dynamicFlipTimers[cardId]);
     
-    setTimeout(() => {
-        cardInner.classList.remove('flipped');
-        setTimeout(() => {
-            closeM('cardmodal');
-            isRevelationActive = false;
-        }, 400);
-    }, 3000);
+    // Vira a carta para a face frontal
+    el.classList.add('flipped');
+    
+    // Segura exibida por exatos 2 segundos (2000ms) e retorna automaticamente
+    dynamicFlipTimers[cardId] = setTimeout(() => {
+        el.classList.remove('flipped');
+    }, 2000);
 }
 
 function endTurn() {
@@ -522,13 +555,13 @@ function confirmSug() {
         
         matchFound = checker.cards.find(c => c.id === susSel || c.id === wepSel || c.id === rObj.id);
         if (matchFound) {
-            alert(`O ${checker.name} contestou a sua sugestão mostrando uma carta correspondente.`);
+            alert(`O ${checker.name} contestou a sua sugestão mostrando uma carta privada.`);
             break;
         }
     }
 
     if (!matchFound) {
-        alert("Nenhum jogador conseguiu contestar a sua sugestão!");
+        alert("Nenhum dos investigadores conseguiu refutar a sua sugestão!");
     }
     
     document.getElementById('sugbtn').disabled = true;
@@ -547,15 +580,15 @@ function confirmAcc() {
     closeM('accmodal');
 
     if(envelope.suspect.id === sus && envelope.weapon.id === wep && envelope.room.id === rom) {
-        alert(`PARABÉNS! O ${cp.name} desvendou o crime! Assassino: ${envelope.suspect.name}, Arma: ${envelope.weapon.name}, Sala: ${envelope.room.name}.`);
+        alert(`FIM DE MISTÉRIO! O ${cp.name} solucionou o caso perfeitamente! Culpado: ${envelope.suspect.name} | Arma: ${envelope.weapon.name} | Local: ${envelope.room.name}.`);
         location.reload();
     } else {
-        alert(`ACUSAÇÃO INCORRETA! O ${cp.name} errou e foi eliminado.`);
+        alert(`ACUSAÇÃO FALHOU! O ${cp.name} apontou pistas erradas e foi removido do caso.`);
         cp.eliminated = true;
         
         let alive = players.filter(p => !p.eliminated);
         if(alive.length === 0) {
-            alert(`Fim de jogo! Solução original: ${envelope.suspect.name} com ${envelope.weapon.name} na sala ${envelope.room.name}.`);
+            alert(`Todos falharam! A solução do crime era: ${envelope.suspect.name} usando ${envelope.weapon.name} no(a) ${envelope.room.name}.`);
             location.reload();
         } else {
             endTurn();
