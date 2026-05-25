@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Detetive - Bloco de Notas</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8b1a1a">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700&family=IM+Fell+English:ital@0;1&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#c9a84c;--gold-l:#e8c96b;--gold-d:#8a6520;--dk:#0d0a08;--parch2:#e8d8b0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Crimson Text',serif;background:var(--dk);color:#f2e8d0;overflow:hidden;width:100vw;height:100vh;user-select:none}
+
+#intro{position:fixed;inset:0;z-index:1000;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#intro-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,#2a1a0a,#0d0a08 50%,#000)}
+.fog{position:absolute;width:200%;height:100%;background:repeating-linear-gradient(0deg,transparent 0%,rgba(200,160,60,.02) 30%,transparent 60%);opacity:.5;animation:fd 12s linear infinite}
+@keyframes fd{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+#intro-c{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:22px;opacity:0;animation:rev 1.5s ease .5s forwards;padding:0 20px;text-align:center}
+@keyframes rev{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+.candle{font-size:48px;animation:cf 1.5s ease-in-out infinite alternate;filter:drop-shadow(0 0 20px rgba(255,180,50,.6))}
+@keyframes cf{from{transform:scale(1) rotate(-1deg)}to{transform:scale(1.04) rotate(2deg)}}
+#ititle{font-family:'Cinzel Decorative',serif;font-size:clamp(26px,6vw,54px);color:var(--gold);text-shadow:0 0 30px rgba(201,168,76,.4),0 2px 4px #000;letter-spacing:3px}
+#isub{font-family:'Cinzel',serif;font-size:clamp(10px,2vw,15px);color:var(--parch2);letter-spacing:5px;opacity:.8}
+.idiv{width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+#itag{font-family:'IM Fell English',serif;font-style:italic;font-size:16px;color:var(--parch2);opacity:.6}
+#ibtn{font-family:'Cinzel',serif;font-size:15px;letter-spacing:2px;color:var(--dk);background:linear-gradient(135deg,var(--gold-l),var(--gold),var(--gold-d));border:none;padding:14px 38px;cursor:pointer;clip-path:polygon(10px 0%,calc(100% - 10px) 0%,100% 50%,calc(100% - 10px) 100%,10px 100%,0% 50%);transition:all .3s;box-shadow:0 0 25px rgba(201,168,76,.25);margin-top:10px}
+#ibtn:hover{transform:scale(1.04);box-shadow:0 0 40px rgba(201,168,76,.5)}
+</style>
+</head>
+<body>
+
+<div id="intro">
+  <div id="intro-bg"></div>
+  <div style="position:absolute;inset:0;overflow:hidden"><div class="fog"></div></div>
+  <div id="intro-c">
+    <div class="candle">🕵️‍♂️</div>
+    <div id="ititle">INVESTIGAÇÃO</div>
+    <div id="isub">BLOCO DE NOTAS NOIR</div>
+    <div class="idiv"></div>
+    <div id="itag">Organize suas pistas. Elimine os inocentes. Descubra o assassino.</div>
+    <button id="ibtn" onclick="location.href='modo-de-jogo.html'">ABRIR BLOCO</button>
+  </div>
+</div>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').then(() => console.log('PWA carregado.'));
+}
+</script>
+</body>
+</html>
